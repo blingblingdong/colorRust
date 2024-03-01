@@ -1,0 +1,19 @@
+[package]
+name = 'colorRust'
+version = '0.1.0'
+edition = '2021'
+
+[lib]
+crate-type = [ 'staticlib' ]
+name = 'colorRust'
+
+[dependencies]
+extendr-api = '*'
+text-colorizer = "1"
+regex = "1"
+assert_cmd = "1"
+predicates = "1"
+
+
+
+
