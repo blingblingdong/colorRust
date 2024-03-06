@@ -8,3 +8,11 @@
 \description{
 用Rust實作一些小巧的系統管理工具，例如：檔案管理、檔案顯示、清理工作目錄等等。這些工具是本人在學習Rust時，為了練習而寫的，並不是很完善，但是可以用來練習Rust的一些基本語法。 This package is a collection of small system management tools implemented in Rust, such as: file management, file display, cleaning up the working directory, etc.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/blingblingdong/colorRust}
+  \item Report bugs at \url{https://github.com/blingblingdong/colorRust/issues}
+}
+
+}

@@ -24,5 +24,19 @@ NULL
 #'@export
 rust_cat <- function(file_name, number_lines, number_nonblank_lines) invisible(.Call(wrap__rust_cat, file_name, number_lines, number_nonblank_lines))
 
+#' rust_head：用Rust實踐head命令
+#'
+#' 檢視檔案前幾行、前幾位元，也可以檢視多個文件
+#'
+#' @param file 可以是某個根目錄或指定文件
+#' @param type_file 文件類型，如txt,csv...，預設是不指定
+#' @param n 印出幾行內容，預設10
+#' @param byte 印出幾個字元，預設是0(0是全部的意思)
+#'
+#' @examples
+#' rust_head("colorRust-Ex.R", "", 10, 0)
+#'@export
+rust_head <- function(file, type_file, n, byte) invisible(.Call(wrap__rust_head, file, type_file, n, byte))
+
 
 # nolint end

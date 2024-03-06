@@ -4,6 +4,79 @@ use std::error::Error;
 use::std::fs::File;
 use std::io::{BufReader, BufRead};
 use std::fs;
+use std::process::Command;
+use std::io::Read;
+
+
+#[extendr]
+fn rust_find(file: &str, type_file: &str) -> Vec<String> {
+    // 创建并配置命令
+    let output = Command::new("find")
+        .arg(file)
+        .arg("-type")
+        .arg("f")
+        .output()
+        .expect("failed to execute process");
+
+    let mut file_vec = Vec::new();
+    let file_str = String::from_utf8_lossy(&output.stdout);
+    for file in file_str.lines() {
+        if type_file.is_empty() {
+            file_vec.push(file.to_string());
+        } else if file.ends_with(type_file) {
+            file_vec.push(file.to_string());
+        }
+    };
+
+    file_vec
+
+}
+
+
+
+/// rust_head：用Rust實踐head命令
+///
+/// 檢視檔案前幾行、前幾位元，也可以檢視多個文件
+///
+/// @param file 可以是某個根目錄或指定文件
+/// @param type_file 文件類型，如txt,csv...，預設是不指定
+/// @param n 印出幾行內容，預設10
+/// @param byte 印出幾個字元，預設是0(0是全部的意思)
+///
+/// @examples
+/// rust_head("colorRust-Ex.R", "", 10, 0)
+///@export
+#[extendr]
+fn rust_head(file: &str, type_file: &str, n: u32, byte: u32) {
+    let vec = rust_find(file, type_file);
+    for file_name in vec {
+      match open(&file_name){
+        Err(err) => println!("{}: {}", file_name, err),
+        Ok(mut file) => {
+          if byte > 0 {
+              rprintln!("==>{}", file_name.green());
+              rprintln!("----------------");
+              let mut handle = file.take(byte as u64);
+              let mut buffer = vec![0; byte as usize];
+              let bytes_read = handle.read(&mut buffer).unwrap();
+              rprintln!("{}", String::from_utf8_lossy(&buffer[..bytes_read]) );
+              rprintln!("----------------");
+            } else {
+              rprintln!("==>{}", file_name.green());
+              rprintln!("----------------");
+              let mut line = String::new();
+              for _ in 0..n {
+                let b = file.read_line(&mut line);
+                rprint!("{}", line);
+                line.clear();
+              }
+              rprintln!("----------------");
+            }
+        }
+      }
+    }
+}
+
 
 #[extendr]
 type MyResult<T> = std::result::Result<T, Box<dyn Error>>;
@@ -125,4 +198,5 @@ fn colorize_text(text: &str, color: &str) -> String {
 extendr_module! {
     mod colorRust;
     fn rust_cat;
+    fn rust_head;
 }
